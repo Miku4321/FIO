@@ -1,12 +1,13 @@
 # FIO
 
-**FIO:** "Functions input output" is a begginer-made C++ library that includes prompt utilities.
-This library expands functions std::cin, getch() and getline() with error handling.
+**FIO:**<br>
+"Functions input output" is a beginner-made C++ library that includes prompt utilities.
+This library expands functions `std::cin`, `getch()` and `getline()` with error handling.
 I'm a beginner and this repository was made to learn how Github works. 
 
-**NOTES:**
--FIO doesn't really have any functions output, since fio::print() got disabled.
--Due to use of getch(), the library may be limited to windows.
+**NOTES:**<br>
+-FIO doesn't really have any output functions, since fio::print() got disabled.<br>
+-Due to use of `getch()`, the library may be limited to Windows.
 
 # Functions list:
 
@@ -14,7 +15,7 @@ I'm a beginner and this repository was made to learn how Github works.
 A simple "Press any key to continue" function.
 You can optionally pass a custom message.
 
-```
+```cpp
 fio::pressProceed();
 fio::pressProceed("Naciśnij dowolny przycisk, aby kontynuować...");
 ```
@@ -24,9 +25,9 @@ As an argument, you need to pass a string of characters that you want the user t
 the loop won't end till the user presses any of the specified keys.
 
 If the user presses escape, programmer who uses the function handles it himself and cancels the input.
-You can optionally pass "false" if you don't want the user to press escape.
+You can optionally pass `false` if you don't want the user to press escape.
 
-```
+```cpp
 char math_operation;
 char escape = 27;
 
@@ -38,14 +39,15 @@ if (math_operation == escape) // Handles the case if user wants to cancel
 	std::cout << "Cancelling...\n";
 	return 0;
 }
-	
-std::cout << math_operation;
+else {
+	std::cout << math_operation;
+}
 ```
 
 ### getRangeChar()
-It's the same as getSch(), but instead it accepts a range of characters, for example digits from 1 to 9.
+It's the same as `getSpecChar()`, but instead it accepts a range of characters, for example digits from 1 to 9.
 
-```
+```cpp
 char num_choice;
 char escape = 27;
 
@@ -57,8 +59,9 @@ if (num_choice == escape) {
 	std::cout << "Cancelling";
 	return 0;
 }
-
-std::cout << num_choice << "\n\n";
+else {
+	std::cout << num_choice << "\n\n";
+}
 
 // get letters
 std::cout << "Press letter a-z: ";
@@ -66,17 +69,17 @@ std::cout << fio::getRangChar('a', 'z', false); // User won't be able to cancel 
 ```
 
 ### pressYN()
-Similar to getSch, but returns a booelan based on Y/N.
+Similar to `getSpecChar()`, but returns a boolean based on if the user presses `Y` or `N`.
 
-```
+```cpp
 std::cout << "Do you want to exit? Y/N";
 
-if (fio::pressYN()) // if user presses 'Y' and the functions returns true
+if (fio::pressYN()) // if user presses 'Y' and the functions returns "true"
 {
 	std::cout << "Exiting...\n";
 	return 0;
 }
-else // if user presses 'N' and the functions returns false
+else // if user presses 'N' and the functions returns "false"
 {
 	std::cout << "Exiting cancelled!\n";
 	// continue
@@ -84,10 +87,10 @@ else // if user presses 'N' and the functions returns false
 ```
 
 ### prompt()
-std::cin, but with built in error handling and buffer flushing.
+`std::cin`, but with built in error handling and buffer flushing.
 For example, the user can't input a string for an int.
 
-```
+```cpp
 int age;
 
 std::cout << "Enter your age: ";
@@ -97,14 +100,14 @@ std::cout << "Your age is: " << age;
 ```
 
 ### removeSpaces()
-Helper function for promptStr.
+Helper function for `promptStr()`.
 Removes spaces from both the front and back, but not between characters.
 
 ### promptStr()
-getline, but trims spaces with removeSpaces().
+`getline()`, but trims spaces with `removeSpaces()`.
 It doesn't accept empty input, or input that consists of only spaces.
 
-```
+```cpp
 std::string name;
 
 std::cout << "Enter your name: ";
@@ -114,9 +117,9 @@ std::cout << "Your name is: " << name;
 ```
 
 ### print()
-std::cout, but as a function. I couldn't really figure out how to print ", " in between the argumetnts so I disabled as it's kinda useless without it.
+``std::cout``, but as a function. I couldn't really figure out how to print `, ` in between the arguments, so I disabled it as it's kinda useless without it.
 
-```
+```cpp
 fio::print("Hello world");                  // Hello world
 fio::print(5);                              // 5
 fio::print(1, ". Your age is: ", 25, '\n'); // 1. Your age is: 25
