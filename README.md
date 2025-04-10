@@ -5,8 +5,13 @@
 This library expands functions `std::cin`, `getch()` and `getline()` with error handling.
 I'm a beginner and this repository was made to learn how Github works. 
 
-**NOTES:**<br>
--FIO doesn't really have any output functions, since fio::print() got disabled.<br>
+**NOTE:** FIO doesn't really have any output functions, since fio::print() got disabled.<br>
+
+# Known issues:
+
+-`prompt()` and `promptStr()` may lock the user in an infinite loop<br>
+-`removeSpaces()` is not really efficient as it goes through 2 loops instead of using standard string functions<br>
+-`print()` doesn't work<br>
 -Due to use of `getch()`, the library may be limited to Windows.
 
 # Functions list:
