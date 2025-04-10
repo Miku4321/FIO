@@ -1,9 +1,9 @@
 #ifndef FIO_H_
 #define FIO_H_
 
-#include <iostream>
-#include <limits>
-#include <conio.h>
+#include <iostream> // std::cout and std::cin
+#include <limits>   // removeSpaces()
+#include <conio.h>  // getch()
 
 namespace fio
 {
@@ -51,7 +51,7 @@ namespace fio
                 return escape_char;
             }
         
-        } while((key < char_begin || key > char_end)); // 27 is escape
+        } while((key < char_begin || key > char_end));
 
         return key;
     }
