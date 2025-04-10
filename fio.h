@@ -1,5 +1,3 @@
-// #include "../../Headers/fio.h"
-
 #ifndef FIO_H_
 #define FIO_H_
 
@@ -15,26 +13,45 @@ namespace fio
         getch();
     }
 
-    char getSch(const std::string& wanted_chars)
+    // Get character specified in the string
+    char getSpecChar(const std::string& wanted_chars, bool allow_to_cancel = true)
     {
         char key;
-        
+        char escape_char = 27;
+
+        if (wanted_chars.empty()) {
+            std::cout << "Wanted chars can't be empty as this introduces an infinite loop!\n";
+            return escape_char;
+        }
+
         do
         {
-            key = toupper(getch());
+            key = getch();
 
-        } while (wanted_chars.find(key) == std::string::npos);
+            if (key == escape_char && allow_to_cancel == true) {
+                return escape_char;
+            }
+
+        } while (wanted_chars.find(key) == std::string::npos); 
 
         return key;
     }
 
-    char getRch(const char& char_begin, const char& char_end)
+    // Get Character specified in range
+    char getRangChar(const char& char_begin, const char& char_end, bool allow_to_cancel = true) 
     {
         char key;
+        char escape_char = 27;
 
-        do {
-            key = toupper(getch());
-        } while(key < char_begin || key > char_end);
+        do
+        {
+            key = getch();
+
+            if (key == escape_char && allow_to_cancel == true) {
+                return escape_char;
+            }
+        
+        } while((key < char_begin || key > char_end)); // 27 is escape
 
         return key;
     }
@@ -68,7 +85,7 @@ namespace fio
         }
     }
 
-    void removeSpaces(std::string &str)
+    void removeSpaces(std::string &str) // Helper function for promptStr()
     {
         // Remove from front
         while(!str.empty() && str[0] == ' ') {
@@ -106,40 +123,3 @@ namespace fio
 };
 
 #endif
-
-/*
-
-Functions list:
-
-pressProceed() -
-A simple "Press any key to continue" function.
-Includes an optional, custom message
-
-getSch() - getSpecifiedChar
-As an argument, you need to pass a string of characters that you want the user to press,
-then the loop doesn't end till the user presses any of the keys passed as arguments.
-If user presses any of the keys, that one character is returned.
-for example: getSch("+-/*")
-
-getRch() - getRangeChar
-It's the same as getSch, but instead it accepts a range of characters.
-for example digits from 1 to 9.
-
-pressYN() -
-Similar to getSch, but returns a booelan based on Y/N.
-
-prompt() -
-std::cin, but with built in error handling and buffer flushing.
-
-removeSpaces() -
-Helper function for promptStr.
-Removes spaces from both the front and back, but not between characters.
-
-promptStr() -
-getline, but trims spaces with removeSpaces.
-It doesn't accept empty input, or input that consists of only spaces.
-
-print() -
-std::cout, but as a function. It wasn't really useful, so I deleted it.
-
-*/
