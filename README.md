@@ -5,13 +5,9 @@
 This library expands functions `std::cin`, `getch()` and `getline()` with error handling.
 I'm a beginner and this repository was made to learn how Github works. 
 
-**NOTE:** FIO doesn't really have any output functions, since fio::print() got disabled.<br>
-
 # Known issues:
 
--`prompt()` and `promptStr()` may lock the user in an infinite loop<br>
--`removeSpaces()` is not really efficient as it goes through 2 loops instead of using standard string functions<br>
--`print()` doesn't work<br>
+-`prompt()` may lock the user in an infinite loop<br>
 -Due to use of `getch()`, the library may be limited to Windows.
 
 # Functions list:
@@ -22,6 +18,8 @@ You can optionally pass a custom message.
 
 ```cpp
 fio::pressProceed();
+
+//Same message, but in polish language
 fio::pressProceed("Naciśnij dowolny przycisk, aby kontynuować...");
 ```
 
@@ -30,64 +28,66 @@ As an argument, you need to pass a string of characters that you want the user t
 the loop won't end till the user presses any of the specified keys.
 
 If the user presses escape, programmer who uses the function handles it himself and cancels the input.
-You can optionally pass `false` if you don't want the user to press escape.
+You can optionally pass `false` if you don't want the user to press escape (Example in `getRangeChar()` section).
 
 ```cpp
 char math_operation;
 char escape = 27;
 
 std::cout << "Choose math operation +-*/ (Press escape to cancel): ";
-math_operation = fio::getSpecChar("+-*/"); // Code will continue only if the user presses '+', '-', '*', '/' or 'escape'
+math_operation = fio::getSpecChar("+-*/");
+// Code will continue only if the user presses +, -, *, / or escape
 
 if (math_operation == escape) // Handles the case if user wants to cancel
 { 
-	std::cout << "Cancelling...\n";
-	return 0;
+    std::cout << "Cancelling...\n";
+    return 0;
 }
 else {
-	std::cout << math_operation;
+   std::cout << math_operation;
 }
 ```
 
 ### getRangeChar()
 It's the same as `getSpecChar()`, but instead it accepts a range of characters, for example digits from 1 to 9.
+Just like in `getSpecChar()`, you can optionally pass `false` if you don't want the user to press escape.
 
 ```cpp
 char num_choice;
 char escape = 27;
 
 // get numbers
-std::cout << "Press number 1-9: ";
-num_choice = fio::getRangChar('1', '9');
+std::cout << "Press a number 1-9: ";
+num_choice = fio::getRangeChar('1', '9');
 
 if (num_choice == escape) {
-	std::cout << "Cancelling";
-	return 0;
+    std::cout << "Cancelling...\n";
+    return 0;
 }
 else {
-	std::cout << num_choice << "\n\n";
+    std::cout << num_choice << "\n\n";
 }
 
 // get letters
-std::cout << "Press letter a-z: ";
-std::cout << fio::getRangChar('a', 'z', false); // User won't be able to cancel due to "false" parameter
+std::cout << "Press a letter a-z: ";
+std::cout << fio::getRangeChar('a', 'z', false); // User won't be able to cancel due to "false" parameter
 ```
 
 ### pressYN()
-Similar to `getSpecChar()`, but returns a boolean based on if the user presses `Y` or `N`.
+Similar to `getSpecChar()`, but accepts only `y/Y/n/N` and returns a boolean.
 
 ```cpp
 std::cout << "Do you want to exit? Y/N";
 
-if (fio::pressYN()) // if user presses 'Y' and the functions returns "true"
+if (fio::pressYN()) // If user presses `y/Y` and the functions returns `true`
 {
-	std::cout << "Exiting...\n";
-	return 0;
+    std::cout << "Exiting...\n";
+    return 0;
 }
-else // if user presses 'N' and the functions returns "false"
+else // If user presses `n/N` and the functions returns `false`
 {
-	std::cout << "Exiting cancelled!\n";
-	// continue
+    std::cout << "Exiting cancelled!\n";
+    // continue
 }
 ```
 
@@ -122,10 +122,13 @@ std::cout << "Your name is: " << name;
 ```
 
 ### print()
-``std::cout``, but as a function. I couldn't really figure out how to print `, ` in between the arguments, so I disabled it as it's kinda useless without it.
+``std::cout``, but as a function. I couldn't really figure out how to print `, ` in between the arguments, so it only prints a '\n' at the end.
+You decide if it's useful or not.
 
 ```cpp
-fio::print("Hello world");                  // Hello world
-fio::print(5);                              // 5
-fio::print(1, ". Your age is: ", 25, '\n'); // 1. Your age is: 25
+int age = 25;
+
+fio::print("Hello world");             // Hello world
+fio::print(5);                         // 5
+fio::print(1, ". Your age is: ", age); // 1. Your age is: 25
 ```
