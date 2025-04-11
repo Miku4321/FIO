@@ -38,7 +38,7 @@ namespace fio
     }
 
     // Get Character specified in range
-    char getRangChar(const char& char_begin, const char& char_end, bool allow_to_cancel = true) 
+    char getRangeChar(const char& char_begin, const char& char_end, bool allow_to_cancel = true) 
     {
         char key;
         char escape_char = 27;
@@ -69,7 +69,7 @@ namespace fio
     template<typename T>
     void prompt(T& val, std::string err_message = "Wrong input! Enter again: ")
     {
-        while(true)
+        while (true)
         {
             std::cin >> val;
             
@@ -87,15 +87,14 @@ namespace fio
 
     void removeSpaces(std::string &str) // Helper function for promptStr()
     {
-        // Remove from front
-        while(!str.empty() && str[0] == ' ') {
-            str.erase(str.begin());
+        if(str.find_first_not_of(' ') == std::string::npos)
+        {
+            str.clear();
+            return;
         }
-        
-        // Remove from back
-        while(!str.empty() && str[str.size()-1] == ' ') {
-            str.erase(str.end() - 1);
-        }
+
+        str.erase(str.begin(), str.begin() + str.find_first_not_of(' '));
+        str.erase(str.begin() + str.find_last_not_of(' ') + 1, str.end());
     }
 
     void promptStr(std::string& str, std::string err_message = "Field can not be empty! Enter again: ")
@@ -114,12 +113,12 @@ namespace fio
         }
     }
 
-    /*
-        template<typename... Args>
-        void print(const Args&... args) {
-            (std::cout << ... << args);
-        }
-    */
+    template<typename... Types>
+    void print(const Types&... args)
+    {
+        (std::cout << ... << args);
+        std::cout << '\n';
+    }
 };
 
 #endif
