@@ -2,8 +2,8 @@
 
 **FIO:**<br>
 "Functions input output" is a beginner-made C++ library that includes prompt utilities.
-This library expands functions `std::cin`, `getch()` and `getline()` with error handling.
-I'm a beginner and this repository was made to learn how Github works. 
+This library expands `std::cin`, `getch()` and `getline()` with quality of life and error handling.
+I'm a beginner and this repository was made to learn how Github works.
 
 # Known issues:
 
@@ -24,53 +24,54 @@ fio::pressProceed("Naciśnij dowolny przycisk, aby kontynuować...");
 ```
 
 ### getSpecChar()
-As an argument, you need to pass a string of characters that you want the user to press,
-the loop won't end till the user presses any of the specified keys.
-
-If the user presses escape, programmer who uses the function handles it himself and cancels the input.
-You can optionally pass `false` if you don't want the user to press escape (Example in `getRangeChar()` section).
+As an argument, you need to pass a string of characters that you want the user to press, the loop won't end till the user presses any of the specified keys.You can optionally pass `true` if you want the user to press escape.
 
 ```cpp
 char math_operation;
-char escape = 27;
 
-std::cout << "Choose math operation +-*/ (Press escape to cancel): ";
+// Without cancelling
+std::cout << "Press either of +-*/ to choose a math operation: ";
 math_operation = fio::getSpecChar("+-*/");
-// Code will continue only if the user presses +, -, *, / or escape
+std::cout << math_operation;
 
-if (math_operation == escape) // Handles the case if user wants to cancel
+std::cout << "\n\n";
+
+// With cancelling
+std::cout << "Press either of +-*/ to choose a math operation (Press escape to cancel): ";
+math_operation = fio::getSpecChar("+-*/", true); // true allows for cancelling
+
+if (math_operation == fio::C_ESCAPE) // Handles the case if user wants to cancel
 { 
     std::cout << "Cancelling...\n";
     return 0;
 }
 else {
-   std::cout << math_operation;
+    std::cout << math_operation;
 }
 ```
 
 ### getRangeChar()
 It's the same as `getSpecChar()`, but instead it accepts a range of characters, for example digits from 1 to 9.
-Just like in `getSpecChar()`, you can optionally pass `false` if you don't want the user to press escape.
+Just like in `getSpecChar()`, you can optionally pass `true` if you want the user to press escape and cancel.
 
 ```cpp
-char num_choice;
-char escape = 27;
-
 // get numbers
 std::cout << "Press a number 1-9: ";
-num_choice = fio::getRangeChar('1', '9');
+std::cout << fio::getRangeChar('1', '9') << "\n\n";
 
-if (num_choice == escape) {
+// get letters (with cancelling)
+char letter_choice;
+
+std::cout << "Press a letter a-z: ";
+letter_choice = fio::getRangeChar('a', 'z', true);
+
+if (letter_choice == fio::C_ESCAPE) {
     std::cout << "Cancelling...\n";
     return 0;
 }
 else {
-    std::cout << num_choice << "\n\n";
+    std::cout << letter_choice;
 }
-
-// get letters
-std::cout << "Press a letter a-z: ";
-std::cout << fio::getRangeChar('a', 'z', false); // User won't be able to cancel due to "false" parameter
 ```
 
 ### pressYN()
@@ -110,13 +111,18 @@ Removes spaces from both the front and back, but not between characters.
 
 ### promptStr()
 `getline()`, but trims spaces with `removeSpaces()`.
-It doesn't accept empty input, or input that consists of only spaces.
+
+Just like with other functions, cancelling is disabled by default but can be enabled by passing `true`.
+If cancelling is enabled and user entered empty input (or input that consists of only spaces), function will interpret is as cancellation, but if cancelling is disabled and user entered empty input, function will interpret it as an error and ask for input again.
+
+You can optionally pass a custom error message.
 
 ```cpp
 std::string name;
 
 std::cout << "Enter your name: ";
 fio::promptStr(name);
+
 
 std::cout << "Your name is: " << name;
 ```
