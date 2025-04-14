@@ -7,48 +7,48 @@
 
 namespace fio
 {
+    constexpr char C_ESCAPE = 27;
+
     void pressProceed(std::string message = "Press any key to proceed...")
     {
         std::cout << message;
         getch();
     }
 
-    // Get character specified in the string
-    char getSpecChar(const std::string& wanted_chars, bool allow_to_cancel = true)
+    // Get one of the characters specified in the string
+    char getSpecChar(const std::string& wanted_chars, bool allow_to_cancel = false)
     {
         char key;
-        char escape_char = 27;
 
         if (wanted_chars.empty()) {
-            std::cout << "Wanted chars can't be empty as this introduces an infinite loop!\n";
-            return escape_char;
+            std::cerr << "\nWanted chars can't be empty as this introduces an infinite loop!\n";
+            return C_ESCAPE;
         }
 
         do
         {
             key = getch();
 
-            if (key == escape_char && allow_to_cancel == true) {
-                return escape_char;
+            if (key == C_ESCAPE && allow_to_cancel == true) {
+                return C_ESCAPE;
             }
 
-        } while (wanted_chars.find(key) == std::string::npos); 
+        } while (wanted_chars.find(key) == std::string::npos);
 
         return key;
     }
 
-    // Get Character specified in range
-    char getRangeChar(const char& char_begin, const char& char_end, bool allow_to_cancel = true) 
+    // Get one of the characters specified in range
+    char getRangeChar(const char& char_begin, const char& char_end, bool allow_to_cancel = false) 
     {
         char key;
-        char escape_char = 27;
-
+        
         do
         {
             key = getch();
 
-            if (key == escape_char && allow_to_cancel == true) {
-                return escape_char;
+            if (key == C_ESCAPE && allow_to_cancel == true) {
+                return C_ESCAPE;
             }
         
         } while((key < char_begin || key > char_end));
@@ -66,6 +66,7 @@ namespace fio
         }
     }
 
+    // Get a variable from the user
     template<typename T>
     void prompt(T& val, std::string err_message = "Wrong input! Enter again: ")
     {
@@ -89,7 +90,6 @@ namespace fio
     {
         if(str.find_first_not_of(' ') == std::string::npos)
         {
-            str.clear();
             return;
         }
 
@@ -97,18 +97,26 @@ namespace fio
         str.erase(str.begin() + str.find_last_not_of(' ') + 1, str.end());
     }
 
-    void promptStr(std::string& str, std::string err_message = "Field can not be empty! Enter again: ")
+    bool promptStr(std::string& input, bool allow_to_cancel = false, std::string err_msg = "Input can't be empty! Enter again: ")
     {
         while (true)
         {
-            getline(std::cin, str);
-            removeSpaces(str);
+            getline(std::cin, input);
+            removeSpaces(input);
 
-            if (str.empty()) {
-                std::cout << err_message;
+            // User cancelled input and function returns true
+            if (input.empty() && allow_to_cancel == true) {
+                return true;
             }
+
+            // User gave empty input. Ask for input again
+            else if (input.empty() && allow_to_cancel == false) {
+                std::cout << err_msg;
+            }
+
+            // User gave normal input. Terminate
             else {
-                break;
+                return false;
             }
         }
     }
